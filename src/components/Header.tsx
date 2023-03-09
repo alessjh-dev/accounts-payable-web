@@ -36,7 +36,7 @@ function Header() {
   };
 
   return (
-    <AppBar position="static" className='Navbar' style={{boxShadow: 'none'}}>
+    <AppBar position="static" className='Navbar' style={{ boxShadow: 'none' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <MonetizationOnIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -124,7 +124,7 @@ function Header() {
               </Button>
             ))}
           </Box>
-
+        
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
