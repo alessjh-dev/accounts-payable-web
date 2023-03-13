@@ -3,6 +3,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import LibraryAddTwoToneIcon from "@mui/icons-material/LibraryAddTwoTone";
 import ManageSearchTwoToneIcon from "@mui/icons-material/ManageSearchTwoTone";
+import { useNavigate } from "react-router-dom";
 
 const userName: string = "Alessandro";
 const role: string = "expert";
@@ -20,6 +21,7 @@ function Welcome() {
 }
 
 function ShowOptions() {
+  const navigate = useNavigate();
   return (
     <Box
       className="Options"
@@ -41,7 +43,10 @@ function ShowOptions() {
             <h3>Ingresar una nueva Solicitud</h3>
           </Box>
           <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
-            <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+            <button
+              style={{ margin: "2rem 2rem 2rem 2rem" }}
+              onClick={() => navigate("/history")}
+            >
               <ManageSearchTwoToneIcon
                 style={{ color: "#1976d2" }}
                 fontSize="large"
@@ -53,7 +58,10 @@ function ShowOptions() {
       ) : (
         <Box>
           <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
-            <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+            <button
+              style={{ margin: "2rem 2rem 2rem 2rem" }}
+              onClick={() => navigate("/history")}
+            >
               <ManageSearchTwoToneIcon
                 style={{ color: "#1976d2" }}
                 fontSize="large"
