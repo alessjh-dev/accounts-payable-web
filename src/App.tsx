@@ -1,10 +1,11 @@
 import "./App.css";
 import * as React from "react";
 import Header from "./components/Header";
-import History from "./pages/History";
+import Welcome from "./pages/Welcome";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import History from './pages/History';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -23,7 +24,7 @@ function App() {
     <CssBaseline />
     <div className="App">
       <Header />
-      <History />
+      <Welcome />
     </div>
     </ThemeProvider>
   );

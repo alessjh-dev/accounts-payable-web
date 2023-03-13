@@ -1,30 +1,24 @@
-import "./../App.css";
-import * as React from "react";
-import reactLogo from './../assets/react.svg';
-import Box from "@mui/material/Box";
+import * as React from 'react';
+import DataTable from './../components/HistoryInterface';
+import { GridColDef } from '@mui/x-data-grid';
 
-function History() {
+const columns: GridColDef[] = [
+  { field: 'id', headerName: 'ID', width: 70 },
+  { field: 'name', headerName: 'Name', width: 130 },
+  { field: 'age', headerName: 'Age', width: 90 },
+  { field: 'email', headerName: 'Email', width: 200 },
+];
 
-  let count = 0;
-  const userName = 'Alessandro';
+const rows = [
+  { id: 1, name: 'John Smith', age: 25, email: 'john.smith@gmail.com' },
+  { id: 2, name: 'Jane Doe', age: 30, email: 'jane.doe@gmail.com' },
+  { id: 3, name: 'Bob Johnson', age: 40, email: 'bob.johnson@gmail.com' },
+  { id: 4, name: 'Mary Brown', age: 35, email: 'mary.brown@gmail.com' },
+  { id: 5, name: 'James Davis', age: 45, email: 'james.davis@gmail.com' },
+];
 
-  function setCount(arg0: (count: any) => any): void {
-    count = count;
-  }
-
-  return (
-    <div className="History">
-      <h1>Hola {userName}, ¿Qué quieres hacer hoy?</h1>
-      <Box className="card"  sx={{ display: { xs: 'block', sm: 'block'}}}>
-        <button style={{marginRight: '2rem', marginLeft: '2rem', marginTop: '2rem', marginBottom: '2rem'}} onClick={() => setCount((count) => count + 1)}>
-          Ingresar una nueva Solicitud
-        </button>
-        <button style={{marginRight: '2rem', marginLeft: '2rem', marginTop: '2rem', marginBottom: '2rem'}} onClick={() => setCount((count) => count + 1)}>
-          Historial de Solicitudes
-        </button>
-      </Box>
-    </div>
-  );
-}
+const History: React.FC = () => {
+  return <DataTable rows={rows} columns={columns} />;
+};
 
 export default History;
