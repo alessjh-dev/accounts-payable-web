@@ -36,3 +36,21 @@ button:hover {
 .read-the-docs {
   color: #888;
 }
+
+
+.paper {
+  padding: 3
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2;
+}
+.input {
+  display: none;
+}
+.button {
+  margin-top: 2;
+  margin-bottom: 1;
+}

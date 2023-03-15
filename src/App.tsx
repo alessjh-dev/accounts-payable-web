@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import History from "./pages/History";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import FacturaSolicitud from "./pages/Request";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -29,6 +30,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Welcome />} />
             <Route path="/history" element={<History />} />
+            <Route path="/request" element={<FacturaSolicitud />} />
           </Routes>
         </Router>
       </div>
