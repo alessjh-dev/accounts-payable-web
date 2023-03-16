@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
-const pages = ['Estadisticas', 'Presupuesto', 'Provisiones'];
+const pages = ['Estadisticas'];
 const settings = ['Mi Cuenta', 'Cerrar Sesión'];
 
 function Header() {

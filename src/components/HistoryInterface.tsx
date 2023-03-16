@@ -1,25 +1,26 @@
 import * as React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { sizeHeight } from '@mui/system';
 
 interface DataTableProps {
   rows: {
     id: number;
-    name: string;
-    age: number;
-    email: string;
+    supplier: string;
+    invoice: string;
+    status: string;
+    downInv?: any;
+    actions?: any;
   }[];
   columns: GridColDef[];
 }
 
 const DataTable: React.FC<DataTableProps> = ({ rows, columns }) => {
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 400, width: "100%", maxWidth: 1200, marginBottom: 50}}>
       <DataGrid
         rows={rows}
         columns={columns}
         initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
-        checkboxSelection
+       
       />
     </div>
   );
