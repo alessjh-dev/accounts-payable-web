@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import Tooltip from "@mui/material/Tooltip";
+import { Slide } from '@mui/material';
 
 const columns: GridColDef[] = [
   {
@@ -73,6 +73,7 @@ const rows = [
 const History: React.FC = () => {
   const navigate = useNavigate();
   return (
+    <Slide direction="left" in={true}>
     <Box className="History">
       <h1>
         Historial de <span style={{ color: "#1976d2" }}>Solicitudes</span> de
@@ -94,6 +95,7 @@ const History: React.FC = () => {
         <DataTable rows={rows} columns={columns} />
       </Box>
     </Box>
+    </Slide>
   );
 };
 

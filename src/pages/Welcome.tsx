@@ -4,19 +4,24 @@ import Box from "@mui/material/Box";
 import LibraryAddTwoToneIcon from "@mui/icons-material/LibraryAddTwoTone";
 import ManageSearchTwoToneIcon from "@mui/icons-material/ManageSearchTwoTone";
 import { useNavigate } from "react-router-dom";
+import { Slide } from "@mui/material";
 
 const userName: string = "Alessandro";
 const role: string = "expert";
 
 function Welcome() {
   return (
-    <Box className="Welcome">
-      <h1>
-        Hola <span style={{ color: "#1976d2" }}>{userName}</span>, ¿Qué quieres
-        hacer hoy?
-      </h1>
-      <ShowOptions />
-    </Box>
+    <Slide direction="right" in={true}>
+      <Box className="Welcome">
+        <Box sx={{ marginBottom: { xs: 0, sm: "7%" } }}>
+          <h1>
+            Hola <span style={{ color: "#1976d2" }}>{userName}</span>, ¿Qué
+            quieres hacer hoy?
+          </h1>
+        </Box>
+        <ShowOptions />
+      </Box>
+    </Slide>
   );
 }
 
@@ -32,7 +37,13 @@ function ShowOptions() {
       }}
     >
       {role === "expert" ? (
-        <Box>
+        <Box
+          sx={{
+            display: { xs: "block", sm: "flex" },
+            alignItems: { sm: "center" },
+            justifyContent: { sm: "center" },
+          }}
+        >
           <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
             <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
               <LibraryAddTwoToneIcon
