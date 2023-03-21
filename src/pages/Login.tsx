@@ -1,3 +1,4 @@
+import TextField from '@mui/material/TextField';
 import React, { Component } from 'react';
 
 class Login extends Component {
@@ -29,24 +30,13 @@ class Login extends Component {
 
         return (
             <form onSubmit={this.handleSubmit}>
-                <label>
-                    Email:
-                    <input
-                        name="email"
-                        type="email"
-                        value={email}
-                        onChange={this.handleInputChange}
-                    />
-                </label>
-                <label>
-                    Password:
-                    <input
-                        name="password"
-                        type="password"
-                        value={password}
-                        onChange={this.handleInputChange}
-                    />
-                </label>
+                
+                    <TextField value={email}
+                        onChange={this.handleInputChange} id="outlined-basic" label="email: " variant="outlined" />
+
+                    <TextField value={password}
+                        onChange={this.handleInputChange}  id="outlined-basic" label="password: " variant="outlined" />
+                
                 <button type="submit">Submit</button>
             </form>
         );
