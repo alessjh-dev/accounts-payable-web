@@ -9,6 +9,7 @@ import History from "./pages/History";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import FacturaSolicitud from "./pages/Request";
 import Summary from './pages/Summary';
+import Login from "./pages/Login";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -29,7 +30,8 @@ function App() {
         <Header />
         <Router>
           <Routes>
-            <Route path="/" element={<Welcome />} />
+          <Route path="/" element={<Login />} />
+            <Route path="/welcome" element={<Welcome />} />
             <Route path="/history" element={<History />} />
             <Route path="/request" element={<FacturaSolicitud />} />
             <Route path="/summary" element={<Summary />} />
