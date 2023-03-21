@@ -43,7 +43,7 @@ button:hover {
 }
 .form {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin-top: 2;
 }
@@ -51,6 +51,6 @@ button:hover {
   display: none;
 }
 .button {
-  margin-top: 2;
+  margin-top: 4;
   margin-bottom: 1;
 }
