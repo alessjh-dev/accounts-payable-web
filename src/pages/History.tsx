@@ -9,6 +9,8 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import { Slide } from '@mui/material';
 
+const role = localStorage.getItem("rol");
+
 const columns: GridColDef[] = [
   {
     field: "id",

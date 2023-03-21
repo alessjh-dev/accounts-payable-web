@@ -6,8 +6,10 @@ import ManageSearchTwoToneIcon from "@mui/icons-material/ManageSearchTwoTone";
 import { useNavigate } from "react-router-dom";
 import { Slide } from "@mui/material";
 
-const userName: string = "Alessandro";
-const role: string = "expert";
+
+
+const userName = localStorage.getItem("userName");
+const role = localStorage.getItem("rol");
 
 function Welcome() {
   return (
