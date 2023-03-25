@@ -12,10 +12,16 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-
-const settings = ["Mi Cuenta", "Cerrar Sesión"];
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Header() {
+  const location = useLocation();
+
+  if (location.pathname === "/") {
+    return null;
+  }
+  const navigate = useNavigate();
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -24,6 +30,17 @@ function Header() {
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleClickUserProfile = () => {
+    handleCloseUserMenu();
+    navigate("/user-profile");
+  };
+
+  const handleClickEndSession = () => {
+    handleCloseUserMenu();
+    localStorage.clear();
+    navigate("/");
   };
 
   return (
@@ -37,7 +54,7 @@ function Header() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/welcome"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -94,11 +111,12 @@ function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem key={"Mi Perfil"} onClick={handleClickUserProfile}>
+                <Typography textAlign="center">Mi Perfil</Typography>
+              </MenuItem>
+              <MenuItem key={"Cerrar Sesión"} onClick={handleClickEndSession}>
+                <Typography textAlign="center">Cerrar Sesión</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

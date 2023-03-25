@@ -1,17 +1,8 @@
 import * as React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
+import { DataTableProps } from '../interfaces/HistoryInterface';
 
-interface DataTableProps {
-  rows: {
-    id: number;
-    supplier: string;
-    invoice: string;
-    status: string;
-    downInv?: any;
-    actions?: any;
-  }[];
-  columns: GridColDef[];
-}
+
 
 const DataTable: React.FC<DataTableProps> = ({ rows, columns }) => {
   return (

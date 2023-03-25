@@ -1,100 +1,346 @@
-import React, { useState } from "react";
-import { Button, TextField, Typography, Grid, Paper } from "@mui/material";
+import * as React from "react";
+import { TextField, InputAdornment, Box, Slide, MenuItem } from "@mui/material";
+import ArticleIcon from "@mui/icons-material/Article";
+import { RequestInterface } from "../interfaces/RequestInterface";
+import MoneyIcon from "@mui/icons-material/Money";
+import StoreIcon from "@mui/icons-material/Store";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import PaymentIcon from "@mui/icons-material/Payment";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useNavigate } from "react-router-dom";
 
-function FacturaSolicitud() {
-  const [numDocumento, setNumDocumento] = useState(0);
-  const [monto, setMonto] = useState("");
-  const [proveedor, setProveedor] = useState("");
-  //const [mostrarOpciones, setMostrarOpciones] = useState(false);
-  //const [opcionSeleccionada, setOpcionSeleccionada] = useState("");
-  //const opciones = ['Gastos de consumo', 'Remuneraciones', 'Bienes y Servicios'];
-  
-  //moneda
-  //tipo de cambio si es pago en dolares
-  //medio por el cual se debe pagar al proveedor 
+const currencies = [
+  {
+    value: "USD",
+    label: "$",
+  },
+  {
+    value: "GTQ",
+    label: "Q",
+  },
+];
 
-  const handleInputChange = (event: any) => {
-    const numDocumento = parseInt(event.target.value);
-    setNumDocumento(numDocumento);
-  };
+const providers = [
+  {
+    value: "1",
+    label: "PINTURERIA EL AMIGO, S.A.",
+  },
+  {
+    value: "2",
+    label: "CARNICERIA LA BENDICIÓN, S.A",
+  },
+];
 
-  const handleSolicitudSubmit = () => {
-    // Aquí puedes enviar los datos del formulario y la factura adjunta a tu servidor o realizar otra acción con ellos
-    console.log({ monto, proveedor });
-  };
+const paymentMethods = [
+  {
+    value: "1",
+    label: "Transferencia",
+  },
+  {
+    value: "2",
+    label: "Cheque",
+  },
+];
 
-  /*const handleMostrarOpciones = () =>{
-    setMostrarOpciones(!mostrarOpciones);
-  }
+const expenseType = [
+  {
+    value: "1",
+    label: "Suministros",
+  },
+  {
+    value: "2",
+    label: "Alquileres",
+  },
+  {
+    value: "3",
+    label: "Materiales",
+  },
+  {
+    value: "4",
+    label: "Útiles y Enseres",
+  },
+  {
+    value: "5",
+    label: "Mobiliario y Equipo",
+  },
+];
 
-  const handleSeleccionarOpcion = (opcion:any) => {
-    setOpcionSeleccionada(opcion);
-    setMostrarOpciones(false);
-  }
-
-  function handleSubmit(event:any) {
-    event.preventDefault();
-    // Enviar información del pago al servidor o API
-  }*/
+export default function Request() {
+  let inputData: RequestInterface = localStorage.getItem("request")
+    ? JSON.parse(localStorage.getItem("request") || "{}")
+    : new RequestInterface();
+  const navigate = useNavigate();
 
   return (
-    <>
-      <h1>
-        Ingreso de datos para{" "}<span style={{ color: "#1976d2" }}>solicitud de pago de factura</span>
-      </h1>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "70vh",
-        }}
-      >
-        <Grid container justifyContent="center"
-         spacing = {2}>
-          <Grid item xs={12} sm={10} md={10} lg={8}>
-            <Paper elevation={10} className="paper">
-              <form onSubmit={handleSolicitudSubmit} className="form">
-                <TextField
-                  label="Numero de Documento"
-                  variant="outlined"
-                  fullWidth
-                  value={numDocumento}
-                  onChange={handleInputChange}
-                  margin="normal"
-                />
-                <TextField
-                  label="Monto"
-                  variant="outlined"
-                  fullWidth
-                  value={monto}
-                  onChange={(e) => setMonto(e.target.value)}
-                  margin="normal"
-                />
-                <TextField
-                  label="Proveedor"
-                  variant="outlined"
-                  fullWidth
-                  value={proveedor}
-                  onChange={(e) => setProveedor(e.target.value)}
-                  margin="normal"
-                />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={!numDocumento || !monto || !proveedor }
-                  className="button"
-                >
-                  Enviar solicitud
-                </Button>
-              </form>
-            </Paper>
-          </Grid>
-        </Grid>
-      </div>
-    </>
+    <Slide direction="left" in={true}>
+      <Box>
+        <h1>
+          Solicitud de pago a{" "}
+          <span style={{ color: "#1976d2" }}>Proveedores</span>
+        </h1>
+
+        <Box
+          display={{ xs: "block", md: "flex" }}
+          sx={{
+            alignItems: { xs: "none", md: "center" },
+            justifyContent: { xs: "none", md: "center" },
+            marginTop: { xs: 0, md: "8%" },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+            }}
+          >
+            <ArticleIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <TextField
+              fullWidth
+              required
+              id="documentNumber"
+              label="Número de la Factura"
+              value={inputData.documentNumber}
+              variant="standard"
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+            }}
+          >
+            <MoneyIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <TextField
+              fullWidth
+              required
+              type={"number"}
+              id="ammount"
+              label="Monto de la Factura"
+              value={inputData.amount}
+              variant="standard"
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+            }}
+          >
+            <CurrencyExchangeIcon
+              sx={{ color: "action.active", mr: 1, my: 0.5 }}
+            />
+            <TextField
+              fullWidth
+              required
+              type={"number"}
+              id="exchangeRate"
+              label="Tipo de Cambio"
+              value={inputData.exchangeRate}
+              variant="standard"
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+            }}
+          >
+             <DateRangeIcon
+              sx={{ color: "action.active", mr: 1, my: 0.5 }}
+            />
+            <TextField
+              fullWidth
+              required
+              helperText="Selecciona la fecha de la factura"
+              type="date"
+              id="documentDate"
+              value={inputData.documentDate}
+              variant="standard"
+            />
+          </Box>
+        </Box>
+        <Box
+          display={{ xs: "block", md: "flex" }}
+          sx={{
+            alignItems: { xs: "none", md: "center" },
+            justifyContent: { xs: "none", md: "center" },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+            }}
+          >
+            <MonetizationOnIcon
+              sx={{ color: "action.active", mr: 1, my: 0.5 }}
+            />
+            <TextField
+              fullWidth
+              required
+              select
+              id="currency"
+              label="Moneda"
+              helperText="Selecciona la moneda"
+              defaultValue="GTQ"
+              SelectProps={{
+                native: true,
+              }}
+              variant="standard"
+              value={inputData.currency}
+            >
+              {currencies.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+              minWidth: {xs: "none", md: "15rem"}
+            }}
+          >
+            <ShoppingBagIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <TextField
+              fullWidth
+              required
+              id="expenseType"
+              label="Tipo de Pago"
+              value={inputData.expenseType}
+              variant="standard"
+              select
+              helperText="Selecciona la moneda"
+              SelectProps={{
+                native: true,
+              }}
+            >
+              {expenseType.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+              minWidth: { xs: "none", md: "15rem" },
+            }}
+          >
+            <StoreIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <TextField
+              fullWidth
+              required
+              select
+              id="providerName"
+              label="Nombre del Proveedor"
+              value={inputData.providerName}
+              variant="standard"
+              helperText="Selecciona el proveedor"
+              SelectProps={{
+                native: true,
+              }}
+            >
+              {providers.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+              minWidth: { xs: "none", md: "15rem" },
+            }}
+          >
+            <PaymentIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <TextField
+              select
+              fullWidth
+              required
+              id="paymentType"
+              label="Pago a Proveedor"
+              value={inputData.paymentType}
+              variant="standard"
+              helperText="Selecciona el proveedor"
+              SelectProps={{
+                native: true,
+              }}
+            >
+              {paymentMethods.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: { xs: "block", sm: "flex" },
+            alignItems: { sm: "center" },
+            justifyContent: { sm: "center" },
+          }}
+        >
+          <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+            <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+              <ArrowBackIcon
+                style={{ color: "#1976d2" }}
+                onClick={() => navigate("/welcome")}
+                fontSize="large"
+              />
+            </button>
+            <h3>Ir a Inicio</h3>
+          </Box>
+          <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+            <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+              <ArrowForwardIcon
+                style={{ color: "#1976d2" }}
+                onClick={() => (
+                  navigate("/file-upload"),
+                  localStorage.setItem("request", JSON.stringify(inputData))
+                )}
+                fontSize="large"
+              />
+            </button>
+            <h3>Siguiente</h3>
+          </Box>
+        </Box>
+      </Box>
+    </Slide>
   );
 }
-
-export default FacturaSolicitud;

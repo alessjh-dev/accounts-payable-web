@@ -3,7 +3,7 @@ import Slide from "@mui/material/Slide";
 import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import List from "@mui/material/List";
@@ -19,11 +19,13 @@ import StoreIcon from "@mui/icons-material/Store";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import PaymentIcon from "@mui/icons-material/Payment";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import SummaryButtons from '../components/SummaryButtons';
+import GetAdditionalButtons from "../components/RequestButtons";
 
 const Demo = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
+
+const rol = localStorage.getItem("rol");
 
 const card = (
   <React.Fragment>
@@ -85,6 +87,7 @@ const card = (
             }}
           >
             <List dense={true}>
+              <ListItem></ListItem>
               <ListItem>
                 <ListItemIcon>
                   <AddShoppingCartIcon />
@@ -107,17 +110,40 @@ const card = (
           </Demo>
         </Box>
       </Grid>
+      {rol === "expert" ? (
+        <Box>
+          <h4>
+            Estado de la Solicitud:{" "}
+            <span style={{ color: "#1976d2" }}>APROBADA</span>
+          </h4>
+        </Box>
+      ) : (
+        <Box></Box>
+      )}
     </CardContent>
   </React.Fragment>
 );
 
-function Summary() {
+function RequestHistory() {
+  const navigate = useNavigate();
+  const { id } = useParams();
   return (
     <Slide direction="left" in={true}>
       <Box className="Summary">
-        <h1 style={{ marginBottom: "5rem" }}>
-          Resumen de la <span style={{ color: "#1976d2" }}>Solicitud</span>
+        <h1>
+          Detalle de la <span style={{ color: "#1976d2" }}>Solicitud</span> #{" "}
+          <span style={{ color: "#1976d2" }}>{id}</span>
         </h1>
+        <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+          <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+            <ArrowBackIcon
+              style={{ color: "#1976d2" }}
+              onClick={() => navigate("/history")}
+              fontSize="large"
+            />
+          </button>
+          <h3>Regresar al Historial</h3>
+        </Box>
         <Box
           sx={{
             display: "flex",
@@ -129,10 +155,32 @@ function Summary() {
             <Card variant="outlined">{card}</Card>
           </Box>
         </Box>
-        <SummaryButtons/>
+        <Box>
+          <Box>
+            <button
+              type="submit"
+              style={{
+                margin: "2rem 2rem 2rem 2rem",
+                backgroundColor: "#1976d2",
+              }}
+            >
+              Descargar Solicitud
+            </button>
+            <button
+              type="submit"
+              style={{
+                margin: "2rem 2rem 2rem 2rem",
+                backgroundColor: "#1976d2",
+              }}
+            >
+              Descargar Factura
+            </button>
+            <GetAdditionalButtons />
+          </Box>
+        </Box>
       </Box>
     </Slide>
   );
 }
 
-export default Summary;
+export default RequestHistory;
