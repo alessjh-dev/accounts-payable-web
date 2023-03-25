@@ -21,6 +21,8 @@ import UserProfile from "./pages/UserProfile";
 import ProviderHistory from "./pages/ProviderHistory";
 import ProviderDetail from "./pages/ProviderDetail";
 import CreateProvider from "./pages/CreateProvider";
+import Payment from "./pages/Payment";
+import Payed from "./pages/Payed";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -52,6 +54,8 @@ function App() {
             <Route path="/provider-history" element={<ProviderHistory />} />
             <Route path="/provider-detail/:id" element={<ProviderDetail />} />
             <Route path="/create-provider" element={<CreateProvider />}></Route>
+            <Route path="/:id/payment" element={<Payment />}></Route>
+            <Route path="/payed" element={<Payed />}></Route>
           </Routes>
         </BrowserRouter>
       </div>

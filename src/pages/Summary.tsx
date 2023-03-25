@@ -1,8 +1,6 @@
 import Box from "@mui/material/Box";
 import Slide from "@mui/material/Slide";
 import React from "react";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { useNavigate } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -11,7 +9,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import MoneyIcon from "@mui/icons-material/Money";
@@ -19,7 +16,10 @@ import StoreIcon from "@mui/icons-material/Store";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import PaymentIcon from "@mui/icons-material/Payment";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import SummaryButtons from '../components/SummaryButtons';
+import { useState } from "react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const Demo = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -112,6 +112,9 @@ const card = (
 );
 
 function Summary() {
+  const navigate = useNavigate();
+  const [isSaved, setIsSaved] = useState(false);
+
   return (
     <Slide direction="left" in={true}>
       <Box className="Summary">
@@ -129,7 +132,65 @@ function Summary() {
             <Card variant="outlined">{card}</Card>
           </Box>
         </Box>
-        <SummaryButtons/>
+        {isSaved ? (
+          <Box
+            sx={{
+              display: { xs: "block", sm: "flex" },
+              alignItems: { sm: "center" },
+              justifyContent: { sm: "center" },
+            }}
+          >
+            <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+              <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+                <DownloadIcon
+                  style={{ color: "#1976d2" }}
+                  onClick={() => console.log("descargando...")}
+                  fontSize="large"
+                />
+              </button>
+              <h3>Descargar Solicitud de Pago</h3>
+            </Box>
+            <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+              <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+                <ArrowBackIcon
+                  style={{ color: "#1976d2" }}
+                  onClick={() => navigate("/welcome")}
+                  fontSize="large"
+                />
+              </button>
+              <h3>Ir a Inicio</h3>
+            </Box>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              display: { xs: "block", sm: "flex" },
+              alignItems: { sm: "center" },
+              justifyContent: { sm: "center" },
+            }}
+          >
+            <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+              <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+                <ArrowBackIcon
+                  style={{ color: "#1976d2" }}
+                  onClick={() => navigate("/request")}
+                  fontSize="large"
+                />
+              </button>
+              <h3>Editar la Solicitud</h3>
+            </Box>
+            <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+              <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+                <SaveAltIcon
+                  style={{ color: "#1976d2" }}
+                  onClick={() => setIsSaved(true)}
+                  fontSize="large"
+                />
+              </button>
+              <h3>Guardar la solicitud</h3>
+            </Box>
+          </Box>
+        )}
       </Box>
     </Slide>
   );

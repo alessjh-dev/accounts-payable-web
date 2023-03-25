@@ -1,7 +1,9 @@
 import Box from "@mui/material/Box";
+import { useNavigate } from 'react-router-dom';
 
 function GetAdditionalButtons() {
   const rol = localStorage.getItem("rol");
+  const navigate = useNavigate();
   if (rol === "approver") {
     return (
       <Box>
@@ -35,6 +37,7 @@ function GetAdditionalButtons() {
             backgroundColor: "yellow",
             color: "black"
           }}
+          onClick={() => navigate("/1/payment")}
         >
           Pagar Factura
         </button>

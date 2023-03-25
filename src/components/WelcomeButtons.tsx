@@ -70,6 +70,18 @@ export default function WelcomeButtons() {
           </button>
           <h3>Aprobación de Solicitudes</h3>
         </Box>
+        <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+          <button
+            style={{ margin: "2rem 2rem 2rem 2rem" }}
+            onClick={() => navigate("/request")}
+          >
+            <LibraryAddTwoToneIcon
+              style={{ color: "#1976d2" }}
+              fontSize="large"
+            />
+          </button>
+          <h3>Ingreso de Factura Especial</h3>
+        </Box>
       </Box>
     );
   } else if (role === "payer") {
