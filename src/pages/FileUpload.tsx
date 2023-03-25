@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 function FileUpload() {
   const handleFileUpload = (event: any) => {
     const files = event.target.files;
-    console.log(files);
   };
 
   const navigate = useNavigate();
@@ -41,7 +40,7 @@ function FileUpload() {
           >
             <FileUploadIcon
               style={{ color: "white" }}
-              onClick={() => console.log("hola")}
+              onClick={() => console.log("Subiendo archivo...")}
               fontSize="medium"
             />
           </button>

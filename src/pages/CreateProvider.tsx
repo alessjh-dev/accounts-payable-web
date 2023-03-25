@@ -7,23 +7,25 @@ import {
   Card,
   Alert,
 } from "@mui/material";
-import { ProviderInterface } from "../interfaces/ProviderInterface";
 import Box from "@mui/material/Box";
-import { InputAdornment, Slide, MenuItem } from "@mui/material";
-import ArticleIcon from "@mui/icons-material/Article";
-import { RequestInterface } from "../interfaces/RequestInterface";
-import MoneyIcon from "@mui/icons-material/Money";
-import StoreIcon from "@mui/icons-material/Store";
-import DateRangeIcon from "@mui/icons-material/DateRange";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import PaymentIcon from "@mui/icons-material/Payment";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
-import EditIcon from "@mui/icons-material/Edit";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
+import LanguageIcon from "@mui/icons-material/Language";
+import HomeIcon from "@mui/icons-material/Home";
+import EditIcon from "@mui/icons-material/Edit";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import PhoneIcon from "@mui/icons-material/Phone";
+import Email from "@mui/icons-material/Email";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
+import BusinessIcon from "@mui/icons-material/Business";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import EmailIcon from "@mui/icons-material/Email";
 
 export default function CreateProvider() {
   const navigate = useNavigate();
@@ -45,14 +47,14 @@ export default function CreateProvider() {
   const [bank, setBank] = useState("");
 
   const handleSaveClick = () => {
-    setShowAlert(true)
+    setShowAlert(true);
   };
 
   return (
     <div>
       <Box>
         <h1>
-          Editar <span style={{ color: "#1976d2" }}>Proveedor</span>
+          Crear <span style={{ color: "#1976d2" }}>Proveedor</span>
         </h1>
         {showAlert && (
           <Alert severity="success" onClose={() => setShowAlert(false)}>
@@ -76,7 +78,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <ArticleIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <StorefrontIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               fullWidth
               required
@@ -96,7 +98,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <MoneyIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <PhoneIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               fullWidth
               required
@@ -117,9 +119,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <CurrencyExchangeIcon
-              sx={{ color: "action.active", mr: 1, my: 0.5 }}
-            />
+            <EmailIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               fullWidth
               required
@@ -140,7 +140,9 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <DateRangeIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <BrandingWatermarkIcon
+              sx={{ color: "action.active", mr: 1, my: 0.5 }}
+            />
             <TextField
               fullWidth
               required
@@ -160,7 +162,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <ArticleIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <BusinessIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               fullWidth
               required
@@ -189,7 +191,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <MoneyIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <HomeIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               fullWidth
               required
@@ -209,9 +211,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <CurrencyExchangeIcon
-              sx={{ color: "action.active", mr: 1, my: 0.5 }}
-            />
+            <LocationCityIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               fullWidth
               required
@@ -231,7 +231,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <DateRangeIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <HomeWorkIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               fullWidth
               required
@@ -251,7 +251,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <DateRangeIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <LanguageIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               fullWidth
               required
@@ -280,7 +280,9 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <MoneyIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <AccountBalanceWalletIcon
+              sx={{ color: "action.active", mr: 1, my: 0.5 }}
+            />
             <TextField
               fullWidth
               required
@@ -300,7 +302,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <CurrencyExchangeIcon
+            <SwitchAccountIcon
               sx={{ color: "action.active", mr: 1, my: 0.5 }}
             />
             <TextField
@@ -322,7 +324,7 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <DateRangeIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <AccountBoxIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               fullWidth
               required
@@ -342,7 +344,9 @@ export default function CreateProvider() {
               marginRight: { xs: "none", md: "3rem" },
             }}
           >
-            <DateRangeIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <AccountBalanceIcon
+              sx={{ color: "action.active", mr: 1, my: 0.5 }}
+            />
             <TextField
               fullWidth
               required

@@ -8,6 +8,7 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import { Slide } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ProviderDatatable from "../components/ProviderDatatable";
+import AddIcon from '@mui/icons-material/Add';
 
 const ProviderHistory: React.FC = () => {
   const navigate = useNavigate();
@@ -107,7 +108,7 @@ const ProviderHistory: React.FC = () => {
           </Box>
           <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
             <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
-              <ArrowBackIcon
+              <AddIcon
                 style={{ color: "#1976d2" }}
                 onClick={() => navigate("/create-provider")}
                 fontSize="large"
