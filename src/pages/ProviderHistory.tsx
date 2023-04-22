@@ -4,23 +4,30 @@ import Box from "@mui/material/Box";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
-import ReceiptIcon from "@mui/icons-material/Receipt";
 import { Slide } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ProviderDatatable from "../components/ProviderDatatable";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { ProviderInterface } from "../interfaces/ProviderInterface";
 
-const ProviderHistory: React.FC = () => {
+function ProviderHistory() {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/providers")
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const columns: GridColDef[] = [
-    {
-      field: "id",
-      headerName: "Id del Proveedor",
-      width: 120,
-      headerAlign: "center",
-      align: "center",
-    },
     {
       field: "name",
       headerName: "Nombre del Proveedor",
@@ -41,6 +48,13 @@ const ProviderHistory: React.FC = () => {
       align: "center",
       headerAlign: "center",
       width: 150,
+    },
+    {
+      field: "email",
+      headerName: "Correo",
+      width: 150,
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "lineOfBusiness",
@@ -65,24 +79,8 @@ const ProviderHistory: React.FC = () => {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      name: "PLÁSTICOS DE GUATEMALA, S.A.",
-      state: "EL PROGRESO",
-      phone: "31145465",
-      lineOfBusiness: "PRODUCTOS VARIOS",
-      actions: ArrowBackIcon,
-    },
-    {
-      id: 2,
-      name: "CLARO GUATEMALA",
-      state: "GUATEMALA",
-      phone: "45457458",
-      lineOfBusiness: "TELECOMUNICACIONES",
-      actions: ArrowBackIcon,
-    },
-  ];
+  const rows = getRows(data);
+
   return (
     <Slide direction="left" in={true}>
       <Box className="History">
@@ -129,6 +127,27 @@ const ProviderHistory: React.FC = () => {
       </Box>
     </Slide>
   );
-};
+}
+
+function getRows(providers: ProviderInterface[]) {
+  let rowArray: any[] = [];
+  providers.forEach((provider) => {
+    const obj = {
+      id: provider._id,
+      name: provider.name,
+      state: provider.addresses[0]
+        ? provider.addresses[0].state
+        : "DESCONOCIDO",
+      phone: provider.phone,
+      email: provider.email,
+      lineOfBusiness: provider.lineOfBusiness,
+      actions: VisibilityIcon,
+    };
+
+    rowArray.push(obj);
+  });
+
+  return rowArray;
+}
 
 export default ProviderHistory;

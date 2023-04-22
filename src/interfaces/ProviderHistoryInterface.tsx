@@ -2,7 +2,6 @@ import { GridColDef } from "@mui/x-data-grid";
 
 export interface ProviderHistoryInterface {
     rows: {
-      id: number;
       name: string;
       state: string;
       phone: string;
