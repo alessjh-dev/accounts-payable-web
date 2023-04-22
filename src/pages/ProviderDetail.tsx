@@ -12,6 +12,11 @@ import {
   InputAdornment,
   IconButton,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import {
   ProviderInterface,
@@ -256,6 +261,7 @@ export default function ProviderDetail() {
   const [formState, setFormState] = useState({
     errors: new ProviderValidation(),
   });
+  const [open, setOpen] = React.useState(false);
   let selectedLine: { label: string; value: string } | undefined;
   let selectedAccount: any[] = [];
   let selectedBank: any[] = [];
@@ -391,20 +397,53 @@ export default function ProviderDetail() {
 
     if (Object.keys(errors).length === 0) {
       axios
-      .put(`http://localhost:3000/providers/${id}`, provider)
+        .put(`http://localhost:3000/providers/${id}`, provider)
+        .then((response) => {
+          setProvider(response.data);
+          setIsEditing(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  const handleDeleteClick = () => {
+    axios
+      .delete(`http://localhost:3000/providers/${id}`)
       .then((response) => {
-        setProvider(response.data);
-        setIsEditing(false);
+        setOpen(false);
+        navigate("/provider-history");
       })
       .catch((error) => {
         console.error(error);
       });
-      
-    }
   };
 
   return (
     <div>
+      <Dialog
+        open={open}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Eliminar Proveedor"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Al hacer click en aceptar se eliminará el proveedor, ¿Está seguro?.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} autoFocus>
+            Cancelar
+          </Button>
+          <Button onClick={handleDeleteClick} autoFocus>
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
       {isEditing ? (
         <Box>
           <h1>
@@ -1025,6 +1064,16 @@ export default function ProviderDetail() {
                 />
               </button>
               <h3>Editar</h3>
+            </Box>
+            <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+              <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+                <DeleteIcon
+                  style={{ color: "#1976d2" }}
+                  onClick={() => setOpen(true)}
+                  fontSize="large"
+                />
+              </button>
+              <h3>Eliminar</h3>
             </Box>
           </Box>
         </div>

@@ -43,7 +43,7 @@ const Login = () => {
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userName", username);
 
-    if (username === "Mónica") {
+    if (username === "Mónica" || username === "Alessandro") {
       localStorage.setItem("rol", "approver");
     } else if (username === "Edy") {
       localStorage.setItem("rol", "payer");
