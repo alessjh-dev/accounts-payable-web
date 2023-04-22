@@ -1,5 +1,5 @@
 export class ProviderInterface {
-  id!: number;
+  id?  : string;
   name!: string;
   phone!: string;
   email!: string;
@@ -7,20 +7,27 @@ export class ProviderInterface {
   lineOfBusiness!: string;
   addresses!: Address[];
   accounts!: Account[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
+
 export class Address {
-  id!: number;
-  fullAddress!: string;
+  complement!: string;
   city!: string;
   state!: string;
-  country!: string;
   town!: string;
 }
 export class Account {
-  id!: number;
   accountNumber!: string;
   accountType!: string;
   titularName!: string;
   bank!: string;
 }
+
+
+
+
+
+
+
