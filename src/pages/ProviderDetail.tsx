@@ -244,7 +244,7 @@ export default function ProviderDetail() {
 
   const { id } = useParams();
   const [provider, setProvider] = useState<ProviderInterface>({
-    _id: "",
+    id: "",
     name: "",
     phone: "",
     email: "",

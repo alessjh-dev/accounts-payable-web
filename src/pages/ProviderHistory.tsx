@@ -133,7 +133,7 @@ function getRows(providers: ProviderInterface[]) {
   let rowArray: any[] = [];
   providers.forEach((provider) => {
     const obj = {
-      id: provider._id,
+      id: provider.id,
       name: provider.name,
       state: provider.addresses[0]
         ? provider.addresses[0].state
