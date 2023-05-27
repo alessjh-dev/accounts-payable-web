@@ -43,6 +43,7 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import axios from "axios";
 import { ProviderValidation } from "../interfaces/ProviderValidationInterface";
+import { environment } from "../environments/environment";
 
 export default function ProviderDetail() {
   const linesOfBusiness = [
@@ -268,7 +269,7 @@ export default function ProviderDetail() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/providers/${id}`)
+      .get(`${environment.api}/providers/${id}`)
       .then((response) => {
         setProvider(response.data);
       })
@@ -397,7 +398,7 @@ export default function ProviderDetail() {
 
     if (Object.keys(errors).length === 0) {
       axios
-        .put(`http://localhost:3000/providers/${id}`, provider)
+        .put(`${environment.api}/providers/${id}`, provider)
         .then((response) => {
           setProvider(response.data);
           setIsEditing(false);
@@ -410,7 +411,7 @@ export default function ProviderDetail() {
 
   const handleDeleteClick = () => {
     axios
-      .delete(`http://localhost:3000/providers/${id}`)
+      .delete(`${environment.api}/providers/${id}`)
       .then((response) => {
         setOpen(false);
         navigate("/provider-history");

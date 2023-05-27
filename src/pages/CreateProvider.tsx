@@ -41,6 +41,7 @@ import {
 } from "../interfaces/ProviderInterface";
 import { ProviderValidation } from "../interfaces/ProviderValidationInterface";
 import axios from "axios";
+import { environment } from "../environments/environment";
 
 
 export default function CreateProvider() {
@@ -371,7 +372,7 @@ export default function CreateProvider() {
 
     if (Object.keys(errors).length === 0) {
       axios
-      .post(`http://localhost:3000/providers/`, provider)
+      .post(`${environment.api}/providers`, provider)
       .then((response) => {
         setProvider(response.data);
         setOpen(true);

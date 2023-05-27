@@ -11,6 +11,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ProviderInterface } from "../interfaces/ProviderInterface";
+import { environment } from "../environments/environment";
 
 function ProviderHistory() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ function ProviderHistory() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/providers")
+      .get(`${environment.api}/providers`)
       .then((response) => {
         setData(response.data);
       })
