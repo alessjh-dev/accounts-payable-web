@@ -79,7 +79,9 @@ function ProviderHistory() {
     },
   ];
 
+
   const rows = getRows(data);
+
 
   return (
     <Slide direction="left" in={true}>
@@ -144,10 +146,16 @@ function getRows(providers: ProviderInterface[]) {
       actions: VisibilityIcon,
     };
 
+
     rowArray.push(obj);
   });
+
 
   return rowArray;
 }
 
+
 export default ProviderHistory;
+
+
+

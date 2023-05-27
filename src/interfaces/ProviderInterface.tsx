@@ -11,6 +11,7 @@ export class ProviderInterface {
   updatedAt?: Date;
 }
 
+
 export class Address {
   complement!: string;
   city!: string;
@@ -23,4 +24,10 @@ export class Account {
   titularName!: string;
   bank!: string;
 }
+
+
+
+
+
+
 

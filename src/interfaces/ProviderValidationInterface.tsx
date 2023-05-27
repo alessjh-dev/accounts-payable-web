@@ -7,8 +7,9 @@ export class ProviderValidation {
     lineOfBusiness?: string;
     hasAddress?: string;
     addresses?: AddressValidation[];
-    accounts?: AccountValidation[];   
+    accounts?: AccountValidation[];  
   }
+
 
   export class AddressValidation {
     index!: number;
@@ -24,4 +25,7 @@ export class ProviderValidation {
     titularName?: string;
     bank?: string;
   }
-  
+ 
+
+
+

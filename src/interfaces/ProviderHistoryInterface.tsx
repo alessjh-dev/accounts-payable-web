@@ -1,5 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
 
+
 export interface ProviderHistoryInterface {
     rows: {
       name: string;
@@ -12,3 +13,4 @@ export interface ProviderHistoryInterface {
     }[];
     columns: GridColDef[];
   }
+
