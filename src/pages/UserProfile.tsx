@@ -1,36 +1,30 @@
-import { useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Alert,
-  Slide,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, TextField, Alert, Slide } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import PasswordIcon from "@mui/icons-material/Password";
-import AppLogo from "./../public/AppLogo.png";
-import PersonIcon from "@mui/icons-material/Person";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import EmailIcon from "@mui/icons-material/Email";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import axios from "axios";
+import { environment } from "../environments/environment";
 
 const UserProfile = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [names, setName] = useState("");
-  const [lastnames, setLastname] = useState("");
+  const [name, setName] = useState("");
+  const [id, setId] = useState("");
+  const [lastname, setLastname] = useState("");
   const [showError, setShowError] = useState(false);
   const [passwordNotMatch, setpasswordNotMatch] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const navigate = useNavigate();
 
-  const handleUsernameChange = (event: any) => {
-    setUsername(event.target.value);
-  };
+  useEffect(() => {
+    setName(localStorage.getItem("userName") || "");
+    setUsername(localStorage.getItem("email") || "");
+    setLastname(localStorage.getItem("lastname") || "");
+    setId(localStorage.getItem("id") || "");
+  }, []);
 
   const handlePasswordChange = (event: any) => {
     setPassword(event.target.value);
@@ -40,21 +34,9 @@ const UserProfile = () => {
     setRepeatPassword(event.target.value);
   };
 
-  const handleEmailChange = (event: any) => {
-    setEmail(event.target.value);
-  };
-
-  const handleNameChange = (event: any) => {
-    setName(event.target.value);
-  };
-
-  const handleLastnameChange = (event: any) => {
-    setLastname(event.target.value);
-  };
-
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    if (!username || !password) {
+    if (!password) {
       setShowError(true);
       return;
     }
@@ -63,7 +45,19 @@ const UserProfile = () => {
       setpasswordNotMatch(true);
       return;
     }
-    setShowSuccessAlert(true);
+    
+    axios
+    .put(`${environment.api}/users/${id}`, {password: password})
+    .then((response) => {
+      setShowSuccessAlert(true);
+      setTimeout(() => {
+        navigate("/welcome")
+      }, 3000);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
   };
 
   return (
@@ -79,7 +73,7 @@ const UserProfile = () => {
         onSubmit={handleSubmit}
       >
         <h1>
-          Editar datos del <span style={{ color: "#1976d2" }}>Perfil</span>
+          Cambia tu <span style={{ color: "#1976d2" }}>contraseña</span>
         </h1>
         {showError && (
           <Alert severity="error" onClose={() => setShowError(false)}>
@@ -100,84 +94,17 @@ const UserProfile = () => {
         )}
 
         <Box
-          sx={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "center",
-          }}
-        >
-          <PersonIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-          <TextField
-            required
-            id="name"
-            label="Nombres"
-            value={names}
-            onChange={handleNameChange}
-            variant="standard"
-            type={"name"}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "center",
-          }}
-        >
-          <PermIdentityIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-          <TextField
-            required
-            id="lastnames"
-            label="Apellidos"
-            value={lastnames}
-            onChange={handleLastnameChange}
-            variant="standard"
-            type={"lastname"}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "center",
-          }}
-        >
-          <EmailIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-          <TextField
-            required
-            id="email"
-            label="Correo"
-            value={email}
-            onChange={handleEmailChange}
-            variant="standard"
-            type={"email"}
-          />
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "center",
-          }}
+    
         >
           <AccountCircle sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-          <TextField
-            required
-            id="username"
-            label="Nombre de usuario"
-            value={username}
-            onChange={handleUsernameChange}
-            variant="standard"
-            type={"username"}
-          />
+          <p>{name} {lastname} - {username} </p>
         </Box>
 
         <Box
           sx={{
             display: "flex",
             alignItems: "flex-end",
-            justifyContent: "center"
+            justifyContent: "center",
           }}
         >
           <PasswordIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />

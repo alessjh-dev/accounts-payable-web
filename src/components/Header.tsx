@@ -111,8 +111,13 @@ function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem key={"Mi Perfil"} onClick={handleClickUserProfile}>
-                <Typography textAlign="center">Mi Perfil</Typography>
+              <MenuItem
+                key={"Cambiar Contraseña"}
+                onClick={handleClickUserProfile}
+              >
+                <Typography textAlign="center">
+                  Actualizar Contraseña
+                </Typography>
               </MenuItem>
               <MenuItem key={"Cerrar Sesión"} onClick={handleClickEndSession}>
                 <Typography textAlign="center">Cerrar Sesión</Typography>

@@ -1,7 +1,13 @@
 import * as React from "react";
-import { TextField, InputAdornment, Box, Slide, MenuItem } from "@mui/material";
+import {
+  TextField,
+  InputAdornment,
+  Box,
+  Slide,
+  MenuItem,
+  Alert,
+} from "@mui/material";
 import ArticleIcon from "@mui/icons-material/Article";
-import { RequestInterface } from "../interfaces/RequestInterface";
 import MoneyIcon from "@mui/icons-material/Money";
 import StoreIcon from "@mui/icons-material/Store";
 import DateRangeIcon from "@mui/icons-material/DateRange";
@@ -12,6 +18,11 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
+import { ProviderInterface } from "../interfaces/ProviderInterface";
+import { useEffect, useState } from "react";
+import axios, { AxiosResponse } from "axios";
+import { environment } from "../environments/environment";
+import { RequestInterface } from "../interfaces/RequestInterface";
 
 const currencies = [
   {
@@ -21,17 +32,6 @@ const currencies = [
   {
     value: "GTQ",
     label: "Q",
-  },
-];
-
-const providers = [
-  {
-    value: "1",
-    label: "PINTURERIA EL AMIGO, S.A.",
-  },
-  {
-    value: "2",
-    label: "CARNICERIA LA BENDICIÓN, S.A",
   },
 ];
 
@@ -46,7 +46,7 @@ const paymentMethods = [
   },
 ];
 
-const expenseType = [
+const expenses = [
   {
     value: "1",
     label: "Suministros",
@@ -69,11 +69,102 @@ const expenseType = [
   },
 ];
 
-export default function Request() {
-  let inputData: RequestInterface = localStorage.getItem("request")
-    ? JSON.parse(localStorage.getItem("request") || "{}")
-    : new RequestInterface();
+function Request() {
   const navigate = useNavigate();
+  const [providers, setProviders] = useState<ProviderInterface[]>([]);
+  const [invoiceNumber, setInvoiceNumber] = useState("");
+  const [ammount, setAmmount] = useState("");
+  const [currency, setCurrency] = useState("");
+  const [exchangeRate, setExchangeRate] = useState("");
+  const [emmissionDate, setEmmissionDate] = useState("");
+  const [expenseType, setExpenseType] = useState("");
+  const [providerId, setProviderId] = useState("");
+  const [paymentType, setPaymentType] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+  const [validateWarn, setValidateWarn] = useState(false);
+
+  const handleInvoiceChange = (event: any) => {
+    setInvoiceNumber(event.target.value);
+  };
+
+  const handleAmmountChange = (event: any) => {
+    setAmmount(event.target.value);
+  };
+
+  const handleCurrencyChange = (event: any) => {
+    setCurrency(event.target.value);
+  };
+
+  const handleExchangeChange = (event: any) => {
+    setExchangeRate(event.target.value);
+  };
+
+  const handleEmmissionChange = (event: any) => {
+    setEmmissionDate(event.target.value);
+  };
+
+  const handleExpenseChange = (event: any) => {
+    setExpenseType(event.target.value);
+  };
+
+  const handleIdChange = (event: any) => {
+    setProviderId(event.target.value);
+  };
+
+  const handlePaymentChange = (event: any) => {
+    setPaymentType(event.target.value);
+  };
+
+  const handleExpirationChange = (event: any) => {
+    setExpirationDate(event.target.value);
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${environment.api}/providers`)
+      .then((response: AxiosResponse<ProviderInterface[]>) => {
+        setProviders(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const minEmissionDate = new Date();
+  minEmissionDate.setDate(new Date().getDate() - 30);
+
+  const handleClickNext = () => {
+    if (
+      invoiceNumber === "" ||
+      ammount === "" ||
+      currency === "" ||
+      emmissionDate === "" ||
+      expirationDate === "" ||
+      expenseType === "" ||
+      providerId === "" ||
+      paymentType === ""
+    ) {
+      setValidateWarn(true);
+      return;
+    }
+    const request: RequestInterface = {
+      ammount: parseFloat(ammount),
+      invoiceNumber: invoiceNumber,
+      currency: currency,
+      emmissionDate: emmissionDate,
+      exchangeRate: exchangeRate === "" ? undefined : parseFloat(exchangeRate),
+      expirationDate: expirationDate,
+      expenseType: expenseType,
+      providerId: parseInt(providerId),
+      paymentType: paymentType,
+      userId: parseInt(localStorage.getItem("id") || ""),
+      state: "PENDIENTE DE APROBACIÓN",
+    };
+    localStorage.setItem("request", JSON.stringify(request));
+    navigate("/file-upload");
+  };
 
   return (
     <Slide direction="left" in={true}>
@@ -83,6 +174,11 @@ export default function Request() {
           <span style={{ color: "#1976d2" }}>Proveedores</span>
         </h1>
 
+        {validateWarn && (
+          <Alert severity="warning" onClose={() => setValidateWarn(false)}>
+            Por favor complete los datos obligatorios.
+          </Alert>
+        )}
         <Box
           display={{ xs: "block", md: "flex" }}
           sx={{
@@ -106,7 +202,8 @@ export default function Request() {
               required
               id="documentNumber"
               label="Número de la Factura"
-              value={inputData.documentNumber}
+              value={invoiceNumber}
+              onChange={handleInvoiceChange}
               variant="standard"
             />
           </Box>
@@ -126,62 +223,11 @@ export default function Request() {
               type={"number"}
               id="ammount"
               label="Monto de la Factura"
-              value={inputData.amount}
+              value={ammount}
+              onChange={handleAmmountChange}
               variant="standard"
             />
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "center",
-              marginBottom: "3rem",
-              marginRight: { xs: "none", md: "3rem" },
-            }}
-          >
-            <CurrencyExchangeIcon
-              sx={{ color: "action.active", mr: 1, my: 0.5 }}
-            />
-            <TextField
-              fullWidth
-              required
-              type={"number"}
-              id="exchangeRate"
-              label="Tipo de Cambio"
-              value={inputData.exchangeRate}
-              variant="standard"
-            />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "center",
-              marginBottom: "3rem",
-              marginRight: { xs: "none", md: "3rem" },
-            }}
-          >
-             <DateRangeIcon
-              sx={{ color: "action.active", mr: 1, my: 0.5 }}
-            />
-            <TextField
-              fullWidth
-              required
-              helperText="Selecciona la fecha de la factura"
-              type="date"
-              id="documentDate"
-              value={inputData.documentDate}
-              variant="standard"
-            />
-          </Box>
-        </Box>
-        <Box
-          display={{ xs: "block", md: "flex" }}
-          sx={{
-            alignItems: { xs: "none", md: "center" },
-            justifyContent: { xs: "none", md: "center" },
-          }}
-        >
           <Box
             sx={{
               display: "flex",
@@ -206,14 +252,98 @@ export default function Request() {
                 native: true,
               }}
               variant="standard"
-              value={inputData.currency}
+              value={currency}
+              onChange={handleCurrencyChange}
             >
+              <option value=""></option>
               {currencies.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option key={option.value} value={option.label}>
                   {option.label}
                 </option>
               ))}
             </TextField>
+          </Box>
+          {currency === "USD" && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+                marginBottom: "3rem",
+                marginRight: { xs: "none", md: "3rem" },
+              }}
+            >
+              <CurrencyExchangeIcon
+                sx={{ color: "action.active", mr: 1, my: 0.5 }}
+              />
+              <TextField
+                fullWidth
+                type={"number"}
+                id="exchangeRate"
+                label="Tipo de Cambio"
+                value={exchangeRate}
+                onChange={handleExchangeChange}
+                variant="standard"
+              />
+            </Box>
+          )}
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+            }}
+          >
+            <DateRangeIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <TextField
+              fullWidth
+              required
+              helperText="Fecha de vencimiento la factura"
+              type="date"
+              id="expirationDate"
+              value={expirationDate}
+              inputProps={{
+                min: today,
+              }}
+              onChange={handleExpirationChange}
+              variant="standard"
+            />
+          </Box>
+        </Box>
+        <Box
+          display={{ xs: "block", md: "flex" }}
+          sx={{
+            alignItems: { xs: "none", md: "center" },
+            justifyContent: { xs: "none", md: "center" },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              marginBottom: "3rem",
+              marginRight: { xs: "none", md: "3rem" },
+            }}
+          >
+            <DateRangeIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+            <TextField
+              fullWidth
+              required
+              helperText="Fecha de emisión la factura"
+              type="date"
+              id="documentDate"
+              value={emmissionDate}
+              onChange={handleEmmissionChange}
+              inputProps={{
+                min: minEmissionDate.toISOString().split("T")[0],
+                max: today,
+              }}
+              variant="standard"
+            />
           </Box>
           <Box
             sx={{
@@ -222,7 +352,7 @@ export default function Request() {
               justifyContent: "center",
               marginBottom: "3rem",
               marginRight: { xs: "none", md: "3rem" },
-              minWidth: {xs: "none", md: "15rem"}
+              minWidth: { xs: "none", md: "15rem" },
             }}
           >
             <ShoppingBagIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
@@ -231,16 +361,18 @@ export default function Request() {
               required
               id="expenseType"
               label="Tipo de Pago"
-              value={inputData.expenseType}
+              value={expenseType}
+              onChange={handleExpenseChange}
               variant="standard"
               select
-              helperText="Selecciona la moneda"
+              helperText="Selecciona el tipo de gasto"
               SelectProps={{
                 native: true,
               }}
             >
-              {expenseType.map((option) => (
-                <option key={option.value} value={option.value}>
+              <option value=""></option>
+              {expenses.map((option) => (
+                <option key={option.value} value={option.label}>
                   {option.label}
                 </option>
               ))}
@@ -260,19 +392,21 @@ export default function Request() {
             <TextField
               fullWidth
               required
-              select
               id="providerName"
               label="Nombre del Proveedor"
-              value={inputData.providerName}
+              value={providerId}
+              onChange={handleIdChange}
               variant="standard"
+              select
               helperText="Selecciona el proveedor"
               SelectProps={{
                 native: true,
               }}
             >
+              <option value=""></option>
               {providers.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+                <option key={option.name} value={option.id}>
+                  {option.name}
                 </option>
               ))}
             </TextField>
@@ -294,15 +428,17 @@ export default function Request() {
               required
               id="paymentType"
               label="Pago a Proveedor"
-              value={inputData.paymentType}
+              value={paymentType}
+              onChange={handlePaymentChange}
               variant="standard"
-              helperText="Selecciona el proveedor"
+              helperText="Selecciona el medio de pago"
               SelectProps={{
                 native: true,
               }}
             >
+              <option value=""></option>
               {paymentMethods.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option key={option.value} value={option.label}>
                   {option.label}
                 </option>
               ))}
@@ -330,10 +466,7 @@ export default function Request() {
             <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
               <ArrowForwardIcon
                 style={{ color: "#1976d2" }}
-                onClick={() => (
-                  navigate("/file-upload"),
-                  localStorage.setItem("request", JSON.stringify(inputData))
-                )}
+                onClick={() => handleClickNext()}
                 fontSize="large"
               />
             </button>
@@ -344,3 +477,5 @@ export default function Request() {
     </Slide>
   );
 }
+
+export default Request;

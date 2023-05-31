@@ -1,10 +1,16 @@
 export class RequestInterface {
-    documentNumber!: string;
-    amount!: number;
-    providerName!: string;
-    documentDate!: Date;
-    expenseType!: string;
-    currency!: string;
-    exchangeRate?: number;
-    paymentType!: string;
+  id?: number;
+  ammount!: number;
+  invoiceNumber!: string;
+  exchangeRate?: number;
+  emmissionDate!: string;
+  expirationDate!: string;
+  currency!: string;
+  expenseType!: string;
+  providerId!: number;
+  paymentType!: string;
+  userId!: number;
+  state!: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
