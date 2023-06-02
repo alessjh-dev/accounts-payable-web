@@ -245,7 +245,7 @@ export default function ProviderDetail() {
 
   const { id } = useParams();
   const [provider, setProvider] = useState<ProviderInterface>({
-    id: "",
+    id: 0,
     name: "",
     phone: "",
     email: "",
@@ -433,7 +433,7 @@ export default function ProviderDetail() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Al hacer click en aceptar se eliminará el proveedor, ¿Está seguro?.
+            Al hacer click en aceptar se eliminará el proveedor, ¿Estás seguro?.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

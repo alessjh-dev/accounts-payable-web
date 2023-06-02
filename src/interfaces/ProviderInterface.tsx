@@ -1,5 +1,5 @@
 export class ProviderInterface {
-  id?  : string;
+  id?  : number;
   name!: string;
   phone!: string;
   email!: string;

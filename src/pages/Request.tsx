@@ -161,6 +161,7 @@ function Request() {
       paymentType: paymentType,
       userId: parseInt(localStorage.getItem("id") || ""),
       state: "PENDIENTE DE APROBACIÓN",
+      billId : 0
     };
     localStorage.setItem("request", JSON.stringify(request));
     navigate("/file-upload");
@@ -226,6 +227,9 @@ function Request() {
               value={ammount}
               onChange={handleAmmountChange}
               variant="standard"
+              inputProps={{
+                min: 1
+              }}
             />
           </Box>
           <Box
@@ -257,8 +261,8 @@ function Request() {
             >
               <option value=""></option>
               {currencies.map((option) => (
-                <option key={option.value} value={option.label}>
-                  {option.label}
+                <option key={option.value} value={option.value}>
+                  {option.value}
                 </option>
               ))}
             </TextField>
@@ -284,6 +288,10 @@ function Request() {
                 value={exchangeRate}
                 onChange={handleExchangeChange}
                 variant="standard"
+                inputProps={{
+                  min: 7,
+                  max: 8
+                }}
               />
             </Box>
           )}

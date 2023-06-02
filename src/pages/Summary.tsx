@@ -22,7 +22,7 @@ import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import DownloadIcon from "@mui/icons-material/Download";
 import { ProviderInterface } from "../interfaces/ProviderInterface";
 import { RequestInterface } from "../interfaces/RequestInterface";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { Alert } from "@mui/material";
 import { environment } from "../environments/environment";
 
@@ -35,6 +35,7 @@ function Summary() {
   const [isSaved, setIsSaved] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [showDownloadError, setShowDownloadError] = useState(false);
   const [provider, setProvider] = useState<ProviderInterface>({
     name: "",
     phone: "",
@@ -56,14 +57,25 @@ function Summary() {
     paymentType: "",
     userId: 0,
     state: "",
+    billId: 0
   });
+  const [providers, setProviders] = useState<ProviderInterface[]>([]);
 
   useEffect(() => {
-    const theRequest: RequestInterface = JSON.parse(
+    let theRequest: RequestInterface = JSON.parse(
       localStorage.getItem("request") || "{}"
     );
+    theRequest.billId = parseInt( localStorage.getItem("fileId") || '');
     if (theRequest) {
       setRequest(theRequest);
+      axios
+        .get(`${environment.api}/providers`)
+        .then((response) => {
+          setProviders(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else {
       navigate("/request");
     }
@@ -74,7 +86,8 @@ function Summary() {
     setShowError(false);
     axios
       .post(`${environment.api}/request`, request)
-      .then(() => {
+      .then((response: AxiosResponse<RequestInterface>) => {
+        setRequest(response.data);
         setShowSuccessAlert(true);
         setIsSaved(true);
       })
@@ -82,6 +95,27 @@ function Summary() {
         setShowError(true);
       });
   };
+
+  const handleDownloadRequest = async (reqId: any) => {
+    setShowDownloadError(false);
+    await axios
+      .get(`${environment.reportsApi}/reports/request/${reqId}`, { responseType: "blob" })
+      .then((response) => {
+        const contentType = response.headers["content-type"];
+        const extension = contentType.split("/").pop();
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `Solicitud-${reqId}.${extension}`);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode?.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(() => {
+        setShowDownloadError(true);
+      });
+    }
 
   return (
     <Slide direction="left" in={true}>
@@ -93,12 +127,16 @@ function Summary() {
           <Alert severity="success" onClose={() => setShowSuccessAlert(false)}>
             Solicitud guardada exitosamente
           </Alert>
-      
         )}
         {showError && (
           <Alert severity="error" onClose={() => setShowError(false)}>
             Tuvimos inconvenientes al guardar tu solicitud, por favor intenta de
             nuevo
+          </Alert>
+        )}
+          {showDownloadError && (
+          <Alert severity="error" onClose={() => setShowDownloadError(false)}>
+            Tuvimos inconvenientes al descargar la solicitud, por favor intenta de nuevo
           </Alert>
         )}
         <br />
@@ -155,7 +193,11 @@ function Summary() {
                             </ListItemIcon>
                             <ListItemText
                               primary="Proveedor"
-                              secondary={request.providerId}
+                              secondary={
+                                providers.find(
+                                  (p) => (p.id = request.providerId)
+                                )?.name || ""
+                              }
                             />
                           </ListItem>
                           <ListItem>
@@ -215,7 +257,7 @@ function Summary() {
               <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
                 <DownloadIcon
                   style={{ color: "#1976d2" }}
-                  onClick={() => console.log("descargando...")}
+                  onClick={() => handleDownloadRequest(request.id)}
                   fontSize="large"
                 />
               </button>

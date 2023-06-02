@@ -13,4 +13,5 @@ export class RequestInterface {
   state!: string;
   createdAt?: Date;
   updatedAt?: Date;
+  billId!: number;
 }
