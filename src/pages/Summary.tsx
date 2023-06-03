@@ -48,6 +48,8 @@ function Summary() {
     userId: 0,
     state: "",
     billId: 0,
+    billType: '',
+    specialCategory: ''
   });
   const [provider, setProvider] = useState<ProviderInterface>();
 

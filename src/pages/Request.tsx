@@ -45,8 +45,8 @@ const billTypes = [
     label: "Factura de anticipo",
   },
   {
-    value: "Facturas de ajuste",
-    label: "Facturas de ajuste",
+    value: "Factura de ajuste",
+    label: "Factura de ajuste",
   },
 ];
 
@@ -240,7 +240,9 @@ function Request() {
       });
   }, []);
 
+
   const today = new Date().toISOString().split("T")[0];
+  
 
   const minEmissionDate = new Date();
   minEmissionDate.setDate(new Date().getDate() - 30);
@@ -473,7 +475,7 @@ function Request() {
             <TextField
               fullWidth
               required
-              helperText="Fecha de vencimiento la factura"
+              helperText="Fecha de vencimiento de la factura"
               type="date"
               id="expirationDate"
               value={expirationDate}
