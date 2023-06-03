@@ -14,4 +14,6 @@ export class RequestInterface {
   createdAt?: Date;
   updatedAt?: Date;
   billId!: number;
+  specialCategory!: string;
+  billType!: string;
 }

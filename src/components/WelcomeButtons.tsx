@@ -20,7 +20,7 @@ export default function WelcomeButtons() {
           <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
             <LibraryAddTwoToneIcon
               style={{ color: "#1976d2" }}
-              onClick={() => navigate("/request")}
+              onClick={() => navigate("/bill-type")}
               fontSize="large"
             />
           </button>

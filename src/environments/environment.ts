@@ -1,4 +1,4 @@
 export const environment = {
-api: 'https://accounts-payable.glitch.me',
-reportsApi: 'https://localhost:8080'
+api: 'http://localhost:3000',
+reportsApi: 'http://localhost:8080'
 }

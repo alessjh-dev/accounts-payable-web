@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { environment } from "../environments/environment";
+import uploaded from "./../public/uploaded.png";
 
 function FileUpload() {
   const [file, setFile] = useState<File>();
@@ -95,7 +96,7 @@ function FileUpload() {
         )}
         {isUploading && (
           <Box>
-            <img src="./../../dist/assets/uploaded.png" height={300} alt="" />
+            <img src={uploaded} height={300} alt="" />
             <h2>
               ¡Estamos <span style={{ color: "#1976d2" }}>subiendo</span> tu
               archivo!
@@ -105,7 +106,7 @@ function FileUpload() {
 
         {isUpload && (
           <Box>
-            <img src="./../../dist/assets/uploaded.png" height={300} alt="" />
+            <img src={uploaded} height={300} alt="" />
             <h2>
               Archivo Subido{" "}
               <span style={{ color: "#1976d2" }}>correctamente</span>, ya puedes

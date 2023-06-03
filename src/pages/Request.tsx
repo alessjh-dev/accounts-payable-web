@@ -35,6 +35,21 @@ const currencies = [
   },
 ];
 
+const billTypes = [
+  {
+    value: "Factura de pagos parciales",
+    label: "Factura de pagos parciales",
+  },
+  {
+    value: "Factura de anticipo",
+    label: "Factura de anticipo",
+  },
+  {
+    value: "Facturas de ajuste",
+    label: "Facturas de ajuste",
+  },
+];
+
 const paymentMethods = [
   {
     value: "1",
@@ -153,13 +168,14 @@ const expenses = [
   },
 ];
 
-
 function Request() {
+  const billType = localStorage.getItem("billType");
   const navigate = useNavigate();
   const [providers, setProviders] = useState<ProviderInterface[]>([]);
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [ammount, setAmmount] = useState("");
   const [currency, setCurrency] = useState("");
+  const [specialCategory, setSpecialCategory] = useState("");
   const [exchangeRate, setExchangeRate] = useState("");
   const [emmissionDate, setEmmissionDate] = useState("");
   const [expenseType, setExpenseType] = useState("");
@@ -167,6 +183,7 @@ function Request() {
   const [paymentType, setPaymentType] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [validateWarn, setValidateWarn] = useState(false);
+  const [showSpecialCategory, setShowSpecialCategory] = useState(false);
 
   const handleInvoiceChange = (event: any) => {
     setInvoiceNumber(event.target.value);
@@ -193,7 +210,7 @@ function Request() {
   };
 
   const handleIdChange = (event: any) => {
-    console.log(event.target.value)
+    console.log(event.target.value);
     setProviderId(event.target.value);
   };
 
@@ -201,11 +218,18 @@ function Request() {
     setPaymentType(event.target.value);
   };
 
+  const handleSpecialChange = (event: any) => {
+    setSpecialCategory(event.target.value);
+  };
+
   const handleExpirationChange = (event: any) => {
     setExpirationDate(event.target.value);
   };
 
   useEffect(() => {
+    if (billType === "ESPECIAL") {
+      setShowSpecialCategory(true);
+    }
     axios
       .get(`${environment.api}/providers`)
       .then((response: AxiosResponse<ProviderInterface[]>) => {
@@ -236,6 +260,9 @@ function Request() {
       setValidateWarn(true);
       return;
     }
+    if (billType === "ESPECIAL" && specialCategory === "") {
+      setValidateWarn(true);
+    }
     const request: RequestInterface = {
       ammount: parseFloat(ammount),
       invoiceNumber: invoiceNumber,
@@ -248,7 +275,9 @@ function Request() {
       paymentType: paymentType,
       userId: parseInt(localStorage.getItem("id") || ""),
       state: "PENDIENTE DE APROBACIÓN GERENTE",
-      billId : 0
+      billId: 0,
+      specialCategory: specialCategory,
+      billType: billType || "",
     };
     localStorage.setItem("request", JSON.stringify(request));
     navigate("/file-upload");
@@ -264,15 +293,62 @@ function Request() {
 
         {validateWarn && (
           <Alert severity="warning" onClose={() => setValidateWarn(false)}>
-            Por favor complete los datos obligatorios.
+            Por favor completa los datos obligatorios.
           </Alert>
+        )}
+
+        {showSpecialCategory && (
+          <Box
+            display={{ xs: "block", md: "flex" }}
+            sx={{
+              alignItems: { xs: "none", md: "center" },
+              justifyContent: { xs: "none", md: "center" },
+              marginTop: { xs: 0, md: "8%" },
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginRight: { xs: "none", md: "3rem" },
+              }}
+            >
+              <MonetizationOnIcon
+                sx={{ color: "action.active", mr: 1, my: 0.5 }}
+              />
+              <TextField
+                fullWidth
+                required
+                select
+                id="specialType"
+                label="Tipo de factura especial"
+                helperText="Selecciona el tipo"
+                defaultValue=""
+                style={{minWidth: '15rem'}}
+                SelectProps={{
+                  native: true,
+                }}
+                variant="standard"
+                value={specialCategory}
+                onChange={handleSpecialChange}
+              >
+                <option value=""></option>
+                {billTypes.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.value}
+                  </option>
+                ))}
+              </TextField>
+            </Box>
+          </Box>
         )}
         <Box
           display={{ xs: "block", md: "flex" }}
           sx={{
             alignItems: { xs: "none", md: "center" },
             justifyContent: { xs: "none", md: "center" },
-            marginTop: { xs: 0, md: "8%" },
+            marginTop: { xs: 0, md: "3%" },
           }}
         >
           <Box
@@ -315,7 +391,7 @@ function Request() {
               onChange={handleAmmountChange}
               variant="standard"
               inputProps={{
-                min: 1
+                min: 1,
               }}
             />
           </Box>
@@ -377,9 +453,9 @@ function Request() {
                 variant="standard"
                 inputProps={{
                   min: 7,
-                  max: 8
+                  max: 8,
                 }}
-                style={{minWidth: '10rem'}}
+                style={{ minWidth: "10rem" }}
               />
             </Box>
           )}
@@ -552,11 +628,11 @@ function Request() {
             <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
               <ArrowBackIcon
                 style={{ color: "#1976d2" }}
-                onClick={() => navigate("/welcome")}
+                onClick={() => navigate("/bill-type")}
                 fontSize="large"
               />
             </button>
-            <h3>Ir a Inicio</h3>
+            <h3>Regresar</h3>
           </Box>
           <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
             <button style={{ margin: "2rem 2rem 2rem 2rem" }}>

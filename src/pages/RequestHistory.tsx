@@ -323,6 +323,18 @@ function RequestHistory() {
                       </Demo>
                     </Box>
                   </Grid>
+                  {request?.billType === "ESPECIAL" ? (
+                    <Box>
+                      <h4>
+                        Factura especial con categoría:{" "}
+                        <span style={{ color: "#FF0000" }}>
+                          {request?.specialCategory}
+                        </span>
+                      </h4>
+                    </Box>
+                  ) : (
+                    <Box></Box>
+                  )}
                   {rol === "expert" ? (
                     <Box>
                       <h4>
