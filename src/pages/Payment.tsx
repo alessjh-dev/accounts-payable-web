@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import {
@@ -15,7 +15,12 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios, { AxiosResponse } from "axios";
+import { environment } from "../environments/environment";
+import { RequestInterface } from "../interfaces/RequestInterface";
+import { ProviderInterface } from "../interfaces/ProviderInterface";
+import { Accounts } from "../interfaces/Accounts.interface";
 
 const Demo = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -23,27 +28,38 @@ const Demo = styled("div")(({ theme }) => ({
 
 export default function Payment() {
   const navigate = useNavigate();
-  const myAccounts = [
-    {
-      value: "1",
-      label: "124567-35, Monetaria, Banco G&T Continental, S.A.",
-    },
-    {
-      value: "2",
-      label: "43456-456, Ahorros, Banco de América Central",
-    },
-  ];
+  const { id } = useParams();
+  const [request, setRequest] = useState<RequestInterface>();
+  const [provider, setProvider] = useState<ProviderInterface>();
+  const [accounts, setAccounts] = useState<Accounts[]>([]);
 
-  const providerAccounts = [
-    {
-      value: "1",
-      label: "343545-4545, Ahorros, Banco de Desarrollo Rural, S.A.",
-    },
-    {
-      value: "2",
-      label: "2447-3-00, Ahorros, Banco Ficohsa, S.A.",
-    },
-  ];
+  useEffect(() => {
+    axios
+      .get(`${environment.api}/request/${id}`)
+      .then((response) => {
+        setRequest(response.data);
+        axios
+          .get(`${environment.api}/providers/${response.data.providerId}`)
+          .then((response: AxiosResponse<ProviderInterface>) => {
+            setProvider(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    axios
+      .get(`${environment.api}/accounts`)
+      .then((response: AxiosResponse<Accounts[]>) => {
+        setAccounts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const [account, setAccount] = useState("");
   const [providerAccount, setProviderAccount] = useState("");
@@ -98,7 +114,7 @@ export default function Payment() {
                         </ListItemIcon>
                         <ListItemText
                           primary="Nombre del Proveedor"
-                          secondary="CLARO, GUATEMALA, S.A."
+                          secondary={provider?.name}
                         />
                       </ListItem>
                     </List>
@@ -109,7 +125,7 @@ export default function Payment() {
                         </ListItemIcon>
                         <ListItemText
                           primary="Monto de la Factura"
-                          secondary="Q.1,500.00"
+                          secondary={request?.ammount}
                         />
                       </ListItem>
                     </List>
@@ -120,7 +136,7 @@ export default function Payment() {
                         </ListItemIcon>
                         <ListItemText
                           primary="Tipo de Pago"
-                          secondary="Gastos de Telecomunicaciones"
+                          secondary={request?.expenseType}
                         />
                       </ListItem>
                     </List>
@@ -165,9 +181,22 @@ export default function Payment() {
                 native: true,
               }}
             >
-              {myAccounts.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+              {accounts.map((option) => (
+                <option
+                  key={option.accountNumber}
+                  value={
+                    option.accountNumber +
+                    ", " +
+                    option.accountType +
+                    ", " +
+                    option.bank
+                  }
+                >
+                  {option.accountNumber +
+                    ", " +
+                    option.accountType +
+                    ", " +
+                    option.bank}
                 </option>
               ))}
             </TextField>
@@ -213,9 +242,22 @@ export default function Payment() {
                     native: true,
                   }}
                 >
-                  {providerAccounts.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
+                  {provider?.accounts.map((option) => (
+                    <option
+                      key={option.accountNumber}
+                      value={
+                        option.accountNumber +
+                        ", " +
+                        option.accountType +
+                        ", " +
+                        option.bank
+                      }
+                    >
+                      {option.accountNumber +
+                        ", " +
+                        option.accountType +
+                        ", " +
+                        option.bank}
                     </option>
                   ))}
                 </TextField>

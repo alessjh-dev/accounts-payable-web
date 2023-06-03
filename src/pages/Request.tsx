@@ -48,26 +48,111 @@ const paymentMethods = [
 
 const expenses = [
   {
-    value: "1",
-    label: "Suministros",
+    value: "Agricultura y ganadería",
+    label: "Agricultura y ganadería",
   },
   {
-    value: "2",
-    label: "Alquileres",
+    value: "Alimentación y bebidas",
+    label: "Alimentación y bebidas",
   },
   {
-    value: "3",
-    label: "Materiales",
+    value: "Artesanías",
+    label: "Artesanías",
   },
   {
-    value: "4",
-    label: "Útiles y Enseres",
+    value: "Automotriz",
+    label: "Automotriz",
   },
   {
-    value: "5",
-    label: "Mobiliario y Equipo",
+    value: "Bienes raíces",
+    label: "Bienes raíces",
+  },
+  {
+    value: "Comercio al por mayor y al por menor",
+    label: "Comercio al por mayor y al por menor",
+  },
+  {
+    value: "Construcción",
+    label: "Construcción",
+  },
+  {
+    value: "Consultoría",
+    label: "Consultoría",
+  },
+  {
+    value: "Educación y capacitación",
+    label: "Educación y capacitación",
+  },
+  {
+    value: "Energía y medio ambiente",
+    label: "Energía y medio ambiente",
+  },
+  {
+    value: "Entretenimiento y medios de comunicación",
+    label: "Entretenimiento y medios de comunicación",
+  },
+  {
+    value: "Finanzas y seguros",
+    label: "Finanzas y seguros",
+  },
+  {
+    value: "Industria aeroespacial y defensa",
+    label: "Industria aeroespacial y defensa",
+  },
+  {
+    value: "Industria química y petroquímica",
+    label: "Industria química y petroquímica",
+  },
+  {
+    value: "Ingeniería y tecnología",
+    label: "Ingeniería y tecnología",
+  },
+  {
+    value: "Investigación y desarrollo",
+    label: "Investigación y desarrollo",
+  },
+  {
+    value: "Logística y transporte",
+    label: "Logística y transporte",
+  },
+  {
+    value: "Manufactura y producción",
+    label: "Manufactura y producción",
+  },
+  {
+    value: "Minería y extracción",
+    label: "Minería y extracción",
+  },
+  {
+    value: "Salud y bienestar",
+    label: "Salud y bienestar",
+  },
+  {
+    value: "Servicios de limpieza y mantenimiento",
+    label: "Servicios de limpieza y mantenimiento",
+  },
+  {
+    value: "Servicios de consultoría y asesoría",
+    label: "Servicios de consultoría y asesoría",
+  },
+  {
+    value: "Servicios de ingeniería y arquitectura",
+    label: "Servicios de ingeniería y arquitectura",
+  },
+  {
+    value: "Servicios de publicidad y marketing",
+    label: "Servicios de publicidad y marketing",
+  },
+  {
+    value: "Tecnología de la información y telecomunicaciones",
+    label: "Tecnología de la información y telecomunicaciones",
+  },
+  {
+    value: "Turismo y hospitalidad",
+    label: "Turismo y hospitalidad",
   },
 ];
+
 
 function Request() {
   const navigate = useNavigate();
@@ -108,6 +193,7 @@ function Request() {
   };
 
   const handleIdChange = (event: any) => {
+    console.log(event.target.value)
     setProviderId(event.target.value);
   };
 
@@ -136,6 +222,7 @@ function Request() {
   minEmissionDate.setDate(new Date().getDate() - 30);
 
   const handleClickNext = () => {
+    console.log(parseInt(providerId));
     if (
       invoiceNumber === "" ||
       ammount === "" ||

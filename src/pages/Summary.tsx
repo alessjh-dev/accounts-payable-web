@@ -36,16 +36,6 @@ function Summary() {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showDownloadError, setShowDownloadError] = useState(false);
-  const [provider, setProvider] = useState<ProviderInterface>({
-    name: "",
-    phone: "",
-    email: "",
-    nit: "",
-    lineOfBusiness: "",
-    addresses: [],
-    accounts: [],
-  });
-
   const [request, setRequest] = useState<RequestInterface>({
     ammount: 0,
     invoiceNumber: "",
@@ -59,19 +49,23 @@ function Summary() {
     state: "",
     billId: 0
   });
-  const [providers, setProviders] = useState<ProviderInterface[]>([]);
+  const [provider, setProvider] = useState<ProviderInterface>();
 
   useEffect(() => {
     let theRequest: RequestInterface = JSON.parse(
       localStorage.getItem("request") || "{}"
     );
+    console.log(theRequest)
     theRequest.billId = parseInt( localStorage.getItem("fileId") || '');
     if (theRequest) {
       setRequest(theRequest);
+      console.log(request)
       axios
-        .get(`${environment.api}/providers`)
-        .then((response) => {
-          setProviders(response.data);
+        .get(`${environment.api}/providers/${request.providerId}`)
+        .then((response: AxiosResponse<ProviderInterface>) => {
+          console.log(response) 
+          setProvider(response.data);
+        
         })
         .catch((error) => {
           console.error(error);
@@ -193,11 +187,7 @@ function Summary() {
                             </ListItemIcon>
                             <ListItemText
                               primary="Proveedor"
-                              secondary={
-                                providers.find(
-                                  (p) => (p.id = request.providerId)
-                                )?.name || ""
-                              }
+                              secondary={provider?.name}
                             />
                           </ListItem>
                           <ListItem>

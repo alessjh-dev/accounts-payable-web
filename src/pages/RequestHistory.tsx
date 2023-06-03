@@ -38,7 +38,7 @@ function RequestHistory() {
   const [open, setOpen] = React.useState(false);
   const [openDeclined, setOpenDeclined] = React.useState(false);
   const [request, setRequest] = useState<RequestInterface>();
-  const [providers, setProviders] = useState<ProviderInterface[]>([]);
+  const [provider, setProvider] = useState<ProviderInterface>();
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [showDownloadError, setShowDownloadError] = useState(false);
   const { id } = useParams();
@@ -52,15 +52,14 @@ function RequestHistory() {
       .get(`${environment.api}/request/${id}`)
       .then((response) => {
         setRequest(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    axios
-      .get(`${environment.api}/providers`)
-      .then((response) => {
-        setProviders(response.data);
+        axios
+          .get(`${environment.api}/providers/${response.data.providerId}`)
+          .then((response: AxiosResponse<ProviderInterface>) => {
+            setProvider(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -271,11 +270,7 @@ function RequestHistory() {
                             </ListItemIcon>
                             <ListItemText
                               primary="Proveedor"
-                              secondary={
-                                providers.find(
-                                  (p) => (p.id = request?.providerId)
-                                )?.name || ""
-                              }
+                              secondary={provider?.name}
                             />
                           </ListItem>
                           <ListItem>
@@ -393,7 +388,7 @@ function RequestHistory() {
                     backgroundColor: "yellow",
                     color: "black",
                   }}
-                  onClick={() => navigate("/1/payment")}
+                  onClick={() => navigate(`/${request?.id}/payment`)}
                 >
                   Pagar Factura
                 </button>

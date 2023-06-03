@@ -18,8 +18,8 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 const History: React.FC = () => {
   const navigate = useNavigate();
   const [requests, setRequests] = useState<RequestInterface[]>([]);
-  const [providers, setProviders] = useState<ProviderInterface[]>([]);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [providers, setProviders] = useState<ProviderInterface[]>([]);
   const rol = localStorage.getItem("rol");
   const userId = localStorage.getItem("id");
 
@@ -34,7 +34,8 @@ const History: React.FC = () => {
     }
     axios
       .get(`${environment.api}/providers`)
-      .then((response) => {
+      .then((response: AxiosResponse<ProviderInterface[]>) => {
+        console.log(response.data);
         setProviders(response.data);
       })
       .catch((error) => {
