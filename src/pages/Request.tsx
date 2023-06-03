@@ -247,7 +247,7 @@ function Request() {
       providerId: parseInt(providerId),
       paymentType: paymentType,
       userId: parseInt(localStorage.getItem("id") || ""),
-      state: "PENDIENTE DE APROBACIÓN",
+      state: "PENDIENTE DE APROBACIÓN GERENTE",
       billId : 0
     };
     localStorage.setItem("request", JSON.stringify(request));
@@ -379,6 +379,7 @@ function Request() {
                   min: 7,
                   max: 8
                 }}
+                style={{minWidth: '10rem'}}
               />
             </Box>
           )}

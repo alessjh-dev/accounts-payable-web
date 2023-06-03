@@ -67,8 +67,15 @@ function RequestHistory() {
   }, []);
 
   const handleApprove = () => {
+    let requestState = "";
+    if (rol === "approver") {
+      requestState = "PENDIENTE DE PAGO";
+    } else if (rol === "manager") {
+      requestState = "PENDIENTE DE VALIDACIÓN";
+    }
+
     axios
-      .put(`${environment.api}/request/${id}`, { state: "PENDIENTE DE PAGO" })
+      .put(`${environment.api}/request/${id}`, { state: requestState })
       .then((response) => {
         setRequest(response.data);
         setOpen(false);
@@ -251,8 +258,10 @@ function RequestHistory() {
                               <MoneyIcon />
                             </ListItemIcon>
                             <ListItemText
-                              primary="Monto"
-                              secondary={request?.ammount}
+                              primary="Monto de la Factura"
+                              secondary={
+                                request?.currency + " " + request?.ammount
+                              }
                             />
                           </ListItem>
                         </List>
@@ -375,6 +384,31 @@ function RequestHistory() {
                   }}
                 >
                   Declinar
+                </button>
+              </Box>
+            )}
+
+            {rol === "manager" && (
+              <Box>
+                <button
+                  type="submit"
+                  onClick={() => setOpen(true)}
+                  style={{
+                    margin: "2rem 2rem 2rem 2rem",
+                    backgroundColor: "green",
+                  }}
+                >
+                  Aprobar
+                </button>
+                <button
+                  type="submit"
+                  onClick={() => setOpenDeclined(true)}
+                  style={{
+                    margin: "2rem 2rem 2rem 2rem",
+                    backgroundColor: "red",
+                  }}
+                >
+                  Rechazar
                 </button>
               </Box>
             )}

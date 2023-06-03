@@ -32,6 +32,11 @@ export default function Payment() {
   const [request, setRequest] = useState<RequestInterface>();
   const [provider, setProvider] = useState<ProviderInterface>();
   const [accounts, setAccounts] = useState<Accounts[]>([]);
+  const [account, setAccount] = useState<number>();
+  const [providerAccount, setProviderAccount] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [showPayButton, setShowPayButton] = useState(false);
 
   useEffect(() => {
     axios
@@ -61,26 +66,59 @@ export default function Payment() {
       });
   }, []);
 
-  const [account, setAccount] = useState("");
-  const [providerAccount, setProviderAccount] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
-  const [showPayButton, setShowPayButton] = useState(false);
-
   const handleAccountChange = (event: any) => {
     setAccount(event.target.value);
-    if (event.target.value === "2") {
-      setShowErrorAlert(false);
-      setShowAlert(true);
-    } else {
-      setShowAlert(false);
-      setShowErrorAlert(true);
-    }
+
+    axios
+      .get(`${environment.api}/accounts/${event.target.value}`)
+      .then((response: AxiosResponse<Accounts>) => {
+        if (request?.currency === "USD") {
+          if (
+            response.data.ammount > 0 &&
+            response.data.ammount >
+              request?.ammount *
+                (request?.exchangeRate ? request?.exchangeRate : 0)
+          ) {
+            setShowErrorAlert(false);
+            setShowAlert(true);
+          } else {
+            setShowAlert(false);
+            setShowErrorAlert(true);
+          }
+        } else {
+          if (
+            response.data.ammount > 0 &&
+            response.data.ammount > (request?.ammount || 0)
+          ) {
+            setShowErrorAlert(false);
+            setShowAlert(true);
+          } else {
+            setShowAlert(false);
+            setShowErrorAlert(true);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleProviderAccountChange = (event: any) => {
     setProviderAccount(event.target.value);
     setShowPayButton(true);
+  };
+
+  const handlePay = () => {
+    axios
+      .put(`${environment.api}/request/${id}`, { state: "PAGADA" })
+      .then(() => {
+        setTimeout(() => {
+          navigate("/payed");
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -125,7 +163,7 @@ export default function Payment() {
                         </ListItemIcon>
                         <ListItemText
                           primary="Monto de la Factura"
-                          secondary={request?.ammount}
+                          secondary={request?.currency + " " + request?.ammount}
                         />
                       </ListItem>
                     </List>
@@ -181,17 +219,9 @@ export default function Payment() {
                 native: true,
               }}
             >
+              <option value=""></option>
               {accounts.map((option) => (
-                <option
-                  key={option.accountNumber}
-                  value={
-                    option.accountNumber +
-                    ", " +
-                    option.accountType +
-                    ", " +
-                    option.bank
-                  }
-                >
+                <option key={option.accountNumber} value={option.id}>
                   {option.accountNumber +
                     ", " +
                     option.accountType +
@@ -242,6 +272,7 @@ export default function Payment() {
                     native: true,
                   }}
                 >
+                  <option value=""></option>
                   {provider?.accounts.map((option) => (
                     <option
                       key={option.accountNumber}
@@ -272,9 +303,9 @@ export default function Payment() {
                     backgroundColor: "yellow",
                     color: "black",
                   }}
-                  onClick={() => navigate("/payed")}
+                  onClick={handlePay}
                 >
-                  PAGAR
+                  Pagar
                 </button>
               </Box>
             )}

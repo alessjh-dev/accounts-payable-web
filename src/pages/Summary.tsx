@@ -47,7 +47,7 @@ function Summary() {
     paymentType: "",
     userId: 0,
     state: "",
-    billId: 0
+    billId: 0,
   });
   const [provider, setProvider] = useState<ProviderInterface>();
 
@@ -55,17 +55,16 @@ function Summary() {
     let theRequest: RequestInterface = JSON.parse(
       localStorage.getItem("request") || "{}"
     );
-    console.log(theRequest)
-    theRequest.billId = parseInt( localStorage.getItem("fileId") || '');
+    console.log(theRequest);
+    theRequest.billId = parseInt(localStorage.getItem("fileId") || "");
     if (theRequest) {
       setRequest(theRequest);
-      console.log(request)
+      
       axios
-        .get(`${environment.api}/providers/${request.providerId}`)
+        .get(`${environment.api}/providers/${theRequest.providerId}`)
         .then((response: AxiosResponse<ProviderInterface>) => {
-          console.log(response) 
+          console.log(response);
           setProvider(response.data);
-        
         })
         .catch((error) => {
           console.error(error);
@@ -93,7 +92,9 @@ function Summary() {
   const handleDownloadRequest = async (reqId: any) => {
     setShowDownloadError(false);
     await axios
-      .get(`${environment.reportsApi}/reports/request/${reqId}`, { responseType: "blob" })
+      .get(`${environment.reportsApi}/reports/request/${reqId}`, {
+        responseType: "blob",
+      })
       .then((response) => {
         const contentType = response.headers["content-type"];
         const extension = contentType.split("/").pop();
@@ -109,7 +110,7 @@ function Summary() {
       .catch(() => {
         setShowDownloadError(true);
       });
-    }
+  };
 
   return (
     <Slide direction="left" in={true}>
@@ -128,9 +129,10 @@ function Summary() {
             nuevo
           </Alert>
         )}
-          {showDownloadError && (
+        {showDownloadError && (
           <Alert severity="error" onClose={() => setShowDownloadError(false)}>
-            Tuvimos inconvenientes al descargar la solicitud, por favor intenta de nuevo
+            Tuvimos inconvenientes al descargar la solicitud, por favor intenta
+            de nuevo
           </Alert>
         )}
         <br />
@@ -168,8 +170,10 @@ function Summary() {
                               <MoneyIcon />
                             </ListItemIcon>
                             <ListItemText
-                              primary="Monto"
-                              secondary={request.ammount}
+                              primary="Monto de la Factura"
+                              secondary={
+                                request.currency + " " + request.ammount
+                              }
                             />
                           </ListItem>
                         </List>

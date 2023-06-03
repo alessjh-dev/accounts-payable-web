@@ -26,9 +26,11 @@ const History: React.FC = () => {
   useEffect(() => {
     let url;
     if (rol === "approver") {
-      url = `${environment.api}/request/state/PENDIENTE DE APROBACIÓN`;
+      url = `${environment.api}/request/state/PENDIENTE DE VALIDACIÓN`;
     } else if (rol === "payer") {
       url = `${environment.api}/request/state/PENDIENTE DE PAGO`;
+    } else if (rol === "manager") {
+      url = `${environment.api}/request/state/PENDIENTE DE APROBACIÓN GERENTE`;
     } else {
       url = `${environment.api}/request/user-id/${userId}`;
     }
@@ -93,7 +95,7 @@ const History: React.FC = () => {
     },
     { field: "supplier", headerName: "Proveedor", width: 320 },
     { field: "invoice", headerName: "Número Factura", width: 150 },
-    { field: "status", headerName: "Estado", width: 220 },
+    { field: "status", headerName: "Estado", width: 280 },
     {
       field: "downInv",
       headerName: "Factura",
