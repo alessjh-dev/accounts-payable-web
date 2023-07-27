@@ -3,7 +3,8 @@ import { GridColDef } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
-import { IconButton } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
+import { Alert, IconButton } from "@mui/material";
 import { Slide } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ProviderDatatable from "../components/ProviderDatatable";
@@ -16,6 +17,7 @@ import { environment } from "../environments/environment";
 function ProviderHistory() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [showDownloadError, setShowDownloadError] = useState(false);
 
   useEffect(() => {
     axios
@@ -83,6 +85,30 @@ function ProviderHistory() {
 
   const rows = getRows(data);
 
+  
+  const handleDownloadRequest = () => {
+    setShowDownloadError(false);
+   axios
+    .get(`${environment.reportsApi}/reports/providers`, {
+      responseType: "blob",
+    })
+    .then((response) => {
+      const contentType = response.headers["content-type"];
+      const extension = contentType.split("/").pop();
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Listado de proveedores.${extension}`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    })
+    .catch(() => {
+      setShowDownloadError(true);
+    });
+  };
+
 
   return (
     <Slide direction="left" in={true}>
@@ -90,6 +116,14 @@ function ProviderHistory() {
         <h1>
           Listado de <span style={{ color: "#1976d2" }}>Proveedores</span>
         </h1>
+        <br />
+        {showDownloadError && (
+          <Alert severity="error" onClose={() => setShowDownloadError(false)}>
+            Tuvimos inconvenientes al descargar la solicitud, por favor intenta
+            de nuevo
+          </Alert>
+        )}
+        <br />
         <Box
           sx={{
             display: { xs: "block", sm: "flex" },
@@ -117,6 +151,16 @@ function ProviderHistory() {
             </button>
             <h3>Crear Proveedor</h3>
           </Box>
+          <Box sx={{ margin: "3rem 3rem 3rem 3rem" }}>
+              <button style={{ margin: "2rem 2rem 2rem 2rem" }}>
+                <DownloadIcon
+                  style={{ color: "#1976d2" }}
+                  onClick={handleDownloadRequest}
+                  fontSize="large"
+                />
+              </button>
+              <h3>Listado de proveedores</h3>
+            </Box>
         </Box>
         <Box
           sx={{
